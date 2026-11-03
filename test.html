@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auto-Reset Countdown</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            background: #121212; 
+            color: #fff; 
+        }
+        #timer { 
+            font-size: 8rem; 
+            font-family: monospace; 
+            margin-bottom: 2rem;
+        }
+        #status {
+            font-size: 1.5rem;
+            height: 2rem;
+            color: #ff9800;
+            margin-bottom: 1rem;
+        }
+        .controls {
+            display: flex;
+            gap: 1rem;
+        }
+        button {
+            padding: 0.8rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #333;
+            color: #fff;
+        }
+        button:hover {
+            background: #555;
+        }
+        #goBtn {
+            background: #2e7d32;
+        }
+        #goBtn:hover {
+            background: #388e3c;
+        }
+        #resetBtn {
+            background: #c62828;
+        }
+        #resetBtn:hover {
+            background: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div id="status"></div>
+    <div id="timer">01:00</div>
+
+    <div class="controls">
+        <button id="goBtn" onclick="startWithCountdown()">GO</button>
+        <button id="resetBtn" onclick="resetTimer()">RESET</button>
+    </div>
+
+    <script>
+        const startingSeconds = 150; // Main workout interval
+        const prepSeconds = 20;       // Get-ready countdown length
+
+        let secondsLeft = startingSeconds;
+        let timerInterval = null;
+        let isPrep = false;
+
+        function updateDisplay(secs) {
+            const mins = String(Math.floor(secs / 60)).padStart(2, '0');
+            const remainingSecs = String(secs % 60).padStart(2, '0');
+            document.getElementById('timer').textContent = `${mins}:${remainingSecs}`;
+        }
+
+        function setStatus(text) {
+            document.getElementById('status').textContent = text;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            isPrep = false;
+            secondsLeft = startingSeconds;
+            updateDisplay(secondsLeft);
+            setStatus('');
+        }
+
+        function startWithCountdown() {
+            if (timerInterval) clearInterval(timerInterval);
+
+            isPrep = true;
+            secondsLeft = prepSeconds;
+            setStatus('GET READY...');
+            updateDisplay(secondsLeft);
+
+            timerInterval = setInterval(() => {
+                secondsLeft--;
+
+                if (isPrep) {
+                    if (secondsLeft < 0) {
+                        isPrep = false;
+                        secondsLeft = startingSeconds;
+                        setStatus('WORK');
+                        updateDisplay(secondsLeft);
+                    } else {
+                        updateDisplay(secondsLeft);
+                    }
+                } else {
+                    if (secondsLeft < 0) {
+                        secondsLeft = startingSeconds;
+                    }
+                    updateDisplay(secondsLeft);
+                }
+            }, 1000);
+        }
+
+        updateDisplay(startingSeconds);
+    </script>
+</body>
+</html>
