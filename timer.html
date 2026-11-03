@@ -27,10 +27,13 @@
         }
         .controls {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90vw;
         }
         button {
-            padding: 0.8rem 2rem;
+            padding: 0.8rem 1.5rem;
             font-size: 1.2rem;
             font-weight: bold;
             border: none;
@@ -42,11 +45,11 @@
         button:hover {
             background: #555;
         }
-        #goBtn {
-            background: #2e7d32;
+        .time-btn {
+            background: #1a73e8;
         }
-        #goBtn:hover {
-            background: #388e3c;
+        .time-btn:hover {
+            background: #1557b0;
         }
         #resetBtn {
             background: #c62828;
@@ -61,15 +64,19 @@
     <div id="timer">01:00</div>
 
     <div class="controls">
-        <button id="goBtn" onclick="startWithCountdown()">GO</button>
+        <button class="time-btn" onclick="startWithCountdown(60)">1 MIN</button>
+        <button class="time-btn" onclick="startWithCountdown(90)">1.5 MIN</button>
+        <button class="time-btn" onclick="startWithCountdown(120)">2 MIN</button>
+        <button class="time-btn" onclick="startWithCountdown(150)">2.5 MIN</button>
+        <button class="time-btn" onclick="startWithCountdown(600)">10 MIN</button>
         <button id="resetBtn" onclick="resetTimer()">RESET</button>
     </div>
 
     <script>
-        const startingSeconds = 150; // Main workout interval
-        const prepSeconds = 20;       // Get-ready countdown length
+        const prepSeconds = 5;
 
-        let secondsLeft = startingSeconds;
+        let activeWorkoutSeconds = 60;
+        let secondsLeft = activeWorkoutSeconds;
         let timerInterval = null;
         let isPrep = false;
 
@@ -87,14 +94,15 @@
             clearInterval(timerInterval);
             timerInterval = null;
             isPrep = false;
-            secondsLeft = startingSeconds;
+            secondsLeft = activeWorkoutSeconds;
             updateDisplay(secondsLeft);
             setStatus('');
         }
 
-        function startWithCountdown() {
+        function startWithCountdown(selectedSeconds) {
             if (timerInterval) clearInterval(timerInterval);
 
+            activeWorkoutSeconds = selectedSeconds;
             isPrep = true;
             secondsLeft = prepSeconds;
             setStatus('GET READY...');
@@ -106,7 +114,7 @@
                 if (isPrep) {
                     if (secondsLeft < 0) {
                         isPrep = false;
-                        secondsLeft = startingSeconds;
+                        secondsLeft = activeWorkoutSeconds;
                         setStatus('WORK');
                         updateDisplay(secondsLeft);
                     } else {
@@ -114,14 +122,14 @@
                     }
                 } else {
                     if (secondsLeft < 0) {
-                        secondsLeft = startingSeconds;
+                        secondsLeft = activeWorkoutSeconds;
                     }
                     updateDisplay(secondsLeft);
                 }
             }, 1000);
         }
 
-        updateDisplay(startingSeconds);
+        updateDisplay(activeWorkoutSeconds);
     </script>
 </body>
 </html>
