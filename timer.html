@@ -21,14 +21,14 @@
         }
         #counter {
             font-size: 1.8rem;
-            color: #1a73e8;
+            color: #0f9d58;
             margin-bottom: 1rem;
             font-weight: bold;
         }
         #status {
             font-size: 1.5rem;
             height: 2rem;
-            color: #ff9800;
+            color: #0f9d58;
             margin-bottom: 1rem;
         }
         .controls {
@@ -72,7 +72,7 @@
 <body>
     <div id="status"></div>
     <div id="timer">01:00</div>
-    <div id="counter">Set: 1</div>
+    <div id="counter">Sets: 1</div>
 
     <div class="controls">
         <button class="time-btn" onclick="startWithCountdown(60)">1 MIN</button>
@@ -103,7 +103,7 @@
         }
 
         function updateCounterDisplay() {
-            document.getElementById('counter').textContent = `Set: ${iterations}`;
+            document.getElementById('counter').textContent = `Sets: ${iterations}`;
         }
 
         function resetTimer() {
